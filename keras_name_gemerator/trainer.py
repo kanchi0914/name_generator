@@ -1,9 +1,10 @@
 from keras_name_gemerator import dictchars_maker, model_setter, name_generator,\
     name_processor, onehot_vec_maker, sequences_maker, csv_loader
 
-def train(model_path, weights_path):
-    datas = csv_loader.load_csv("csv/en_jp_names.csv")
+def train(data_path, model_path, weights_path):
+    datas = csv_loader.load_csv(data_path)
     names = [data[1] for data in datas]
+
     names, chars = name_processor.process_names(names)
 
     seqlen = 4
@@ -53,3 +54,7 @@ def train_model(model, *, x, x2, y, chars, dictchars, total_epochs=180,
         for _ in range(50):
             print(name_generator.generate_random_name
                   (model,chars=chars,dictchars=dictchars,temperature=0.4))
+
+
+if __name__ == '__main__':
+    train(data_path="csv/jp_italy_names.csv", model_path="models/model_it.h5", weights_path="weights/weights_it.h5")

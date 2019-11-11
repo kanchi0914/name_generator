@@ -35,34 +35,32 @@ class Scraper():
             reader = csv.reader(file)
             return [row for row in reader]
 
-            # for row in reader:
-            #     print(row[0])
-
     def get_jp_names(self, csvPath, savePath):
         csvData = self.load_csv(csvPath)
         del csvData[0][0]
         with open(savePath, "w", newline="", encoding='utf-8') as file:
             writer = csv.writer(file)
             for i, line in enumerate(csvData):
-                en_name = line[0]
-                ja_names = get_from_weblio(en_name)
-                print(i , "-" , en_name , ":" , ja_names)
-                writer.writerow([ja_names])
+                if (len(line) > 0):
+                    raw_name = line[0]
+                    ja_names = get_from_weblio(raw_name)
+                    print(i, "-", raw_name, ":", ja_names)
+                    writer.writerow([ja_names])
 
-    def get_reliable_name(self):
-        en_data = self.load_csv("csv/names.csv")
-        del en_data[0]
-        jp_data = self.load_csv("csv/jaNames.csv")
+    def get_reliable_name(self, country, csvPath, jaNames, savePath):
+        raw_data = self.load_csv(csvPath)
+        del raw_data[0]
+        jp_data = self.load_csv(jaNames)
         try:
-            with open("csv/reliable_names4.csv", "w", newline="", encoding="utf-8") as file:
+            with open(savePath, "w", newline="", encoding="utf-8") as file:
                 writer = csv.writer(file)
                 count = 0
-                for en, jps in zip(en_data, jp_data):
+                for raw, jps in zip(raw_data, jp_data):
                     count += 1
-                    if (count < 281): continue
-                    en_name = en[0]
-                    google_jp_name = translator.get(en_name)
+                    raw_name = raw[0]
+                    google_jp_name = ""
                     reliable_jp_name = ""
+                    google_jp_name = translator.get(text=raw_name, country=country)
                     if len(jps) > 0:
                         jp_names_list = jps[0].split(",")
                         if google_jp_name in jp_names_list:
@@ -70,9 +68,11 @@ class Scraper():
                             reliable_jp_name = jp_names_list[index]
                         elif len(jp_names_list) > 0:
                             reliable_jp_name = jp_names_list[0]
+                    elif len(google_jp_name) > 0:
+                        reliable_jp_name = google_jp_name
 
                     list = []
-                    list.append(en_name)
+                    list.append(raw_name)
                     list.append(reliable_jp_name)
                     print(count, ":", list)
                     writer.writerow(list)

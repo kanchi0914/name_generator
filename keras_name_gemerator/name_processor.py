@@ -17,14 +17,15 @@ def process_names(names, *, unwanted=['(', ')', '-', '.', '/']):
     maxes = [len(name) for name in names]
     maxlen = max(maxes)
 
+    new_names = [name for name in names if len(name) > 0]
+
     # for i, name in enumerate(names):
-    #     print(name)
     #     if (len(name) < 2):
     #         print(i)
     #         print(name)
 
 
-    minlen = min([len(name) for name in names])
+    minlen = min([len(name) for name in new_names])
     print("Longest name is", maxlen, "characters long")
     print("Shortest name is", minlen, "characters long")
 
@@ -37,4 +38,4 @@ def process_names(names, *, unwanted=['(', ')', '-', '.', '/']):
     assert (endchar not in chars)
     chars += endchar
 
-    return names, chars
+    return new_names, chars

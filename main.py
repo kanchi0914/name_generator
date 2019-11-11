@@ -1,5 +1,5 @@
 from scraper import  Scraper
-from googletrans import Translator
+#from googletrans import Translator
 import requests
 
 # translator = Translator(service_urls=[
@@ -13,9 +13,12 @@ import requests
 
 
 
-scraper = Scraper("https://names.mongabay.com/most_common_surnames.htm")
+scraper = Scraper()
 #scraper.scrapeTabel("csv/names.csv")
-scraper.get_reliable_name()
+#scraper.get_reliable_name()
+#scraper.get_jp_names(csvPath="csv/Italian.csv", savePath="jp_italian_names.csv")
+scraper.get_reliable_name(country="it", csvPath="csv/Italian.csv", jaNames="csv/jp_italian_names.csv",
+                          savePath="csv/jp_italy_names.csv")
 
 #scraper.get_jp_names("csv/names.csv", "csv/jaNames.csv")
 # print (scraper.load_csv("csv/names.csv"))
